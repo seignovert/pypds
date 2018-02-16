@@ -154,3 +154,22 @@ class DB(object):
         for a specific instrument'''
         sql = 'SELECT SUM(nb_imgs) FROM all_%s' % inst.lower()
         return int(self.fetchOne(sql)[0])
+
+    def img(self, img_id, inst=INSTRUMENT):
+        '''Search IMG with img_id'''
+        img_key = int(img_id.split('_')[0])
+        sql = 'SELECT release FROM all_%s ' % inst.lower()
+        sql += 'WHERE first >= %i ORDER BY release LIMIT 1' % img_key
+        release = self.fetchOne(sql)
+        if not release is None:
+            return self.img_release(img_id, release[0])
+        return None
+
+    def img_release(self, img_id, release):
+        '''Search IMG with img_id in a specific release'''
+        sql = 'SELECT * FROM %s ' % release
+        sql += 'WHERE img_id = "%s"' % img_id
+        img = self.fetchOne(sql)
+        if not img is None:
+            return IMG(img[0], img[1], release)
+        return None

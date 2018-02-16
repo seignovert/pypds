@@ -147,6 +147,15 @@ DB().nb_tot_imgs('vims')
 # Delete the database
 DB().delete
 
+## IMAGES
+
+# Search an image
+DB().img('1766654697_1','vims')
+# or [default: `VIMS`]
+DB().img('1766654697_1')
+
+# Get `.lbl` pds location
+DB().img('1766654697_1').lbl
 ```
 
 
