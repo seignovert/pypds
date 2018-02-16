@@ -167,13 +167,15 @@ class DB(object):
         sql += 'WHERE first >= %i ORDER BY release LIMIT 1' % img_key
         release = self.fetchOne(sql)
         if not release is None:
-            return self.img_release(img_id, release[0])
-        return None
+            img = self.img_release(img_id, release[0])
+        if img is None:
+            img = self.img_all(img_id, inst)
+        return img
 
     def img_release(self, img_id, release):
         '''Search IMG with img_id in a specific release'''
         sql = 'SELECT * FROM %s ' % release
-        sql += 'WHERE img_id = "%s"' % img_id
+        sql += 'WHERE img_id = "%s" LIMIT 1' % img_id
         img = self.fetchOne(sql)
         if not img is None:
             return IMG(img[0], img[1], release)
@@ -189,3 +191,24 @@ class DB(object):
                 releases.append(release[0])
             return releases
         return None
+
+    def img_all(self, img_id, inst=INSTRUMENT):
+        '''Search IMG all the available releases in the database'''
+        imgs = []
+        for release in self.releases(inst):   
+            sql = 'SELECT * FROM %s ' % release
+            sql += 'WHERE img_id LIKE "%%%s%%"' % img_id
+            _imgs = self.fetchAll(sql)
+            if len(_imgs) == 1:
+                imgs.append(
+                    IMG(_imgs[0][0], _imgs[0][1], release)
+                )
+            elif len(_imgs) > 1:
+                for img in _imgs:
+                    imgs.append(IMG(img[0], img[1], release))
+
+        if len(imgs) == 0:
+            raise ValueError('Image %s not found' % img_id)
+        elif len(imgs) == 1:
+            return imgs[0]
+        return imgs
