@@ -16,8 +16,16 @@ import pypds as pds
 # Check the last release for `VIMS`
 pds.PDS('VIMS').last_release
 
+# Download a single release
+pds.PDS('VIMS').download(1)
+# or
+pds.PDS('VIMS').download('covims_0001')
+
+# Download a serie releases
+pds.PDS('VIMS').download([1,2,3])
+
 # Download all the available releases
-pds.PDS('VIMS').download_all
+pds.PDS('VIMS').download()
 ```
 
 Usage

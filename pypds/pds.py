@@ -56,7 +56,7 @@ class PDS(PDS_OBJ):
     def last_release(self):
         '''Check the last release available on the PDS'''
         if self.verbose:
-            print('Checking the last release (%s)...' % self.inst.upper())
+            print('Checking the last release (%s)' % self.inst.upper())
 
         logging.getLogger("requests").setLevel(logging.WARNING)
         page = requests.get(self.root_url + '/volumes/' + self.inst + '.html')
@@ -67,15 +67,18 @@ class PDS(PDS_OBJ):
             print('> Last release available: #%i' % last_release)
         return last_release
 
-    @property
-    def download_all(self):
-        '''Download all the releases availables'''
-        if self.verbose:
-            print('Download all the releases availables')
-        for release in range(1, self.last_release):
-            RELEASE(release, self.inst, verbose=False, load=False).download
-        return
+    def download(self, release=None):
+        '''Download one or a list of releases'''
+        if release is None:
+            releases = range(1, self.last_release)
+        elif isinstance(release, (int,str)):
+            releases = [release]
+        else:
+            releases = release
 
+        for _release in releases:
+            RELEASE(_release, self.inst, self.verbose, load=False).download
+        return
 
 class RELEASE(PDS_OBJ):
     def __init__(self, ref, inst=INSTRUMENT, verbose=VERBOSE, load=True, overwrite=False):
@@ -130,9 +133,6 @@ class RELEASE(PDS_OBJ):
     def download(self):
         '''Download the missing md5 releases'''
         mkdir(MD5)
-
-        if self.verbose:
-            print 'Checking missing md5 release files...'
 
         if not isfile(MD5, self.md5, self.overwrite):
             if self.verbose:
