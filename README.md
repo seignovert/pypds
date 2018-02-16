@@ -156,6 +156,11 @@ DB().img('1766654697_1')
 
 # Get `.lbl` pds location
 DB().img('1766654697_1').lbl
+
+## RELEASE
+
+# Get all the releases for an instrument
+pypds.DB().releases('vims')
 ```
 
 

@@ -51,6 +51,11 @@ class DB(object):
         self.cursor.execute(sql)
         return self.cursor.fetchone()
 
+    def fetchAll(self, sql):
+        '''Fetch all rows'''
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
+
     def drop_table(self, tname):
         '''Drop exisiting table'''
         self.commit
@@ -172,4 +177,15 @@ class DB(object):
         img = self.fetchOne(sql)
         if not img is None:
             return IMG(img[0], img[1], release)
+        return None
+
+    def releases(self, inst=INSTRUMENT):
+        '''Search all the releases for an instrument'''
+        sql = 'SELECT release FROM all_%s' % inst.lower()
+        list = self.fetchAll(sql)
+        if not list is None:
+            releases = []
+            for release in list:
+                releases.append(release[0])
+            return releases
         return None
