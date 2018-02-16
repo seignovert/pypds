@@ -103,6 +103,17 @@ class PDS(PDS_OBJ):
             RELEASE(_release, self.inst, self.verbose, load=False).download
         return
 
+    def remove_release(self, release=None):
+        '''Remove one or a list of releases'''
+        if isinstance(release, (int,str)):
+            releases = [release]
+        else:
+            releases = release
+
+        for _release in releases:
+            RELEASE(_release, self.inst, self.verbose, load=False).remove
+        return
+
     @property
     def update(self):
         '''Download new releases'''
@@ -210,7 +221,7 @@ class RELEASE(PDS_OBJ):
 
     @property
     def download(self):
-        '''Download the missing md5 releases'''
+        '''Download the md5 file release'''
         mkdir(MD5)
 
         if not isfile(MD5, self.md5, self.overwrite):
@@ -221,6 +232,20 @@ class RELEASE(PDS_OBJ):
 
         elif self.verbose:
             print('-> The %s already exists' % self.md5)
+
+        return
+    
+    @property
+    def remove(self):
+        '''Remove the missing md5 file release'''
+        mkdir(MD5)
+
+        if isfile(MD5, self.md5, self.overwrite):
+            os.remove(os.path.join(MD5, self.md5))
+            if self.verbose:
+                print('-> Removed md5 for the release %s' % str(self))
+        elif self.verbose:
+            print('-> The %s does not already exist' % self.md5)
 
         return
     

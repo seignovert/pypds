@@ -30,7 +30,6 @@ pds.PDS('VIMS').download_release('covims_0001')
 # Download a serie releases
 pds.PDS('VIMS').download_release([1,2,3])
 
-
 # Count the number of images included in the downloaded releases
 pds.PDS('VIMS').nb_imgs
 # or
