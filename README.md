@@ -121,6 +121,33 @@ img.jpg
 img.thumb
 # Get its `.TIFF` location
 img.tiff
+```
+
+Database
+---
+```python
+from pypds import DB
+
+# Create the database based on MD5 files
+# available for a specific instrument
+DB().build('vims')
+
+# Search for the first image in a release
+DB().first('covims_0001')
+
+# Search for the last image in a release
+DB().last('covims_0001')
+
+# Count the number of images in a release
+DB().nb_imgs('covims_0001')
+
+# Count the total number of images in the database
+DB().nb_tot_imgs
+# or
+len(DB())
+
+# Delete the database
+DB().delete
 
 ```
 

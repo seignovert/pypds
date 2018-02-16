@@ -13,6 +13,7 @@ VERBOSE = True
 _ROOT = os.path.abspath(os.path.dirname(__file__))
 MD5 = os.path.join(_ROOT, 'md5')
 CSV = os.path.join(_ROOT, 'csv')
+DB_NAME = os.path.join(_ROOT, 'pds.db')
 
 
 def mkdir(folder):
