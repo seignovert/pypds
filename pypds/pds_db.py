@@ -18,9 +18,6 @@ class DB(object):
     def __repr__(self):
         return 'PDS database'
 
-    def __len__(self):
-        return self.nb_tot_imgs
-
     @property
     def delete(self):
         '''Delete the database'''
@@ -151,8 +148,9 @@ class DB(object):
         sql = 'SELECT COUNT(img_id) FROM %s' % release
         return int(self.fetchOne(sql)[0])
 
-    @property
-    def nb_tot_imgs(self):
-        '''Count the total number of images in the database'''
-        sql = 'SELECT SUM(nb_imgs) FROM all_releases'
+    def nb_tot_imgs(self, inst):
+        '''
+        Count the total number of images in the database
+        for a specific instrument'''
+        sql = 'SELECT SUM(nb_imgs) FROM all_%s' % inst.lower()
         return int(self.fetchOne(sql)[0])

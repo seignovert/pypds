@@ -142,9 +142,7 @@ DB().last('covims_0001')
 DB().nb_imgs('covims_0001')
 
 # Count the total number of images in the database
-DB().nb_tot_imgs
-# or
-len(DB())
+DB().nb_tot_imgs('vims')
 
 # Delete the database
 DB().delete
