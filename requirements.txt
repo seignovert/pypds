@@ -1,0 +1,6 @@
+# Install pypds itself
+-e .
+
+# Install our development requirements
+pytest
+pytest-cov
