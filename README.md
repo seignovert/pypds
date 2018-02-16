@@ -19,6 +19,9 @@ pds.PDS('VIMS').last_release
 # List the releases downloaded
 pds.PDS('VIMS').releases
 
+# Download all the new releases
+pds.PDS('VIMS').update
+
 # Download a single release
 pds.PDS('VIMS').download_release(1)
 # or
@@ -27,8 +30,6 @@ pds.PDS('VIMS').download_release('covims_0001')
 # Download a serie releases
 pds.PDS('VIMS').download_release([1,2,3])
 
-# Download all the available releases
-pds.PDS('VIMS').download_release()
 
 # Count the number of images included in the downloaded releases
 pds.PDS('VIMS').nb_imgs

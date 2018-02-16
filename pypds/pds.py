@@ -94,17 +94,26 @@ class PDS(PDS_OBJ):
 
     def download_release(self, release=None):
         '''Download one or a list of releases'''
-        if release is None:
-            releases = range(1, self.last_release)
-            if self.verbose:
-                print('All the available releases will be downloaded')
-        elif isinstance(release, (int,str)):
+        if isinstance(release, (int,str)):
             releases = [release]
         else:
             releases = release
 
         for _release in releases:
             RELEASE(_release, self.inst, self.verbose, load=False).download
+        return
+
+    @property
+    def update(self):
+        '''Download new releases'''
+        old = int(self.releases[-1].split('_')[1])
+        new = range(old+1, self.last_release+1)
+        if len(new) == 0 and self.verbose:
+            print('No new releases available')
+        else:
+            print('All the new available releases will be downloaded')
+            for release in new:
+                self.download_release(release)
         return
 
     @property
@@ -150,6 +159,9 @@ class RELEASE(PDS_OBJ):
             self.load
         return
     
+    def __int__(self):
+        return self.ref
+
     def __str__(self):
         return 'co%s_%.4i' % (self.inst.lower(), self.ref)
 
