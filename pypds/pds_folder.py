@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import datetime as dt
-
-from ._communs import INSTRUMENT, VERBOSE, PDS_OBJ
+from ._communs import INSTRUMENT, VERBOSE, PDS_OBJ, date_split
 
 class FOLDER(PDS_OBJ):
     def __init__(self, name, release, inst=INSTRUMENT, fmt='%Y%jT%H%M%S'):
         PDS_OBJ.__init__(self, inst)
         self.name = name
-        self.start, self.end = self.split(fmt)
+        self.start, self.end = date_split(name, fmt)
         self.release = release
         self.imgs = []
         return
@@ -38,28 +36,6 @@ class FOLDER(PDS_OBJ):
             'data',
             self.name
         ]) + '/'
-
-    def split(self, fmt='%Y%jT%H%M%S'):
-        '''Split Date1_Date2 folder into datetime'''
-        start, end = self.name.split('_')
-
-        # BugFix wrong date in PDS (covims_0003)
-        if start[:4] == '1866':
-            # Use the end year for substitution
-            print('[Warning] Wrong year %s -> %s (%s)' % (
-                start[:4], end[:4], self.name
-            ))
-            start = end[:4]+start[4:]
-
-        if end[:4] == '1866':
-            # Use the start year for substitution
-            print('[Warning] Wrong year %s -> %s (%s)' % (
-                end[:4], start[:4], self.name
-            ))
-            end = start[:4]+end[4:]
-
-        return dt.datetime.strptime(start, fmt),\
-               dt.datetime.strptime(end, fmt)
 
     @property
     def first(self):

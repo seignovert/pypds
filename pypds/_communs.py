@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import datetime as dt
 
 ROOT_URL = 'https://pds-imaging.jpl.nasa.gov'
 MISSION = 'cassini'
@@ -27,6 +28,38 @@ def isfile(root, fname, overwrite=False):
     if overwrite:
         print('[Warning] %s will be overwritten' % f)
     return (os.path.isfile(f) and not overwrite)
+
+
+def date_split(name, fmt='%Y%jT%H%M%S'):
+    '''Split Date1_Date2 folder into datetime'''
+    start, end = name.split('_')
+
+    # BugFix wrong date in PDS (covims_0003)
+    if start[:4] == '1866':
+        # Use the end year for substitution
+        print('[Warning] Wrong year %s -> %s (%s)' % (
+            start[:4], end[:4], name
+        ))
+        start = end[:4]+start[4:]
+
+    if end[:4] == '1866':
+        # Use the start year for substitution
+        print('[Warning] Wrong year %s -> %s (%s)' % (
+            end[:4], start[:4], name
+        ))
+        end = start[:4]+end[4:]
+
+    return dt.datetime.strptime(start, fmt),\
+        dt.datetime.strptime(end, fmt)
+
+
+def list_md5(inst):
+    '''List the releases downloaded for specific instrument'''
+    releases = []
+    for md5 in os.listdir(MD5):
+        if md5.endswith('_md5.txt') and inst in md5:
+            releases.append(md5.replace('_md5.txt', ''))
+    return releases
 
 
 class PDS_OBJ(object):

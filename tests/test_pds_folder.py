@@ -51,10 +51,10 @@ def test_nb_imgs(folder, release, instrument):
     assert type(nb_imgs) is int
     assert nb_imgs >= 0
 
-def test_split(folder, release, instrument, folder_fmt, dt_start, dt_end):
-    start, end = FOLDER(folder, release, instrument).split(fmt=folder_fmt)
-    assert start == dt_start
-    assert end == dt_end
+def test_date(folder, release, instrument, folder_fmt, dt_start, dt_end):
+    f = FOLDER(folder, release, instrument)
+    assert f.start == dt_start
+    assert f.end == dt_end
 
 def test_first(folder, release, instrument, first_img):
     assert FOLDER(folder, release, instrument).first is None

@@ -6,13 +6,13 @@ import requests
 import logging
 
 from ._communs import ROOT_URL, MISSION, SPACECRAFT,\
-                      INSTRUMENT, VERBOSE, MD5, PDS_OBJ
+                      INSTRUMENT, VERBOSE, PDS_OBJ, list_md5
 from .pds_release import RELEASE
 
 class PDS(PDS_OBJ):
     def __init__(self, inst=INSTRUMENT, verbose=VERBOSE):
         PDS_OBJ.__init__(self, inst, verbose)
-        self.releases = self.list_md5
+        self.releases = list_md5(inst)
         return
 
     def __repr__(self):
@@ -22,15 +22,6 @@ class PDS(PDS_OBJ):
 
     def __len__(self):
         return self.nb_releases
-
-    @property
-    def list_md5(self):
-        '''List the releases downloaded'''
-        releases = []
-        for md5 in os.listdir(MD5):
-            if md5.endswith('_md5.txt') and self.inst in md5:
-                releases.append(md5.replace('_md5.txt', ''))
-        return releases
 
     @property
     def nb_releases(self):
