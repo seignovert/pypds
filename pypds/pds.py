@@ -128,7 +128,7 @@ class PDS(PDS_OBJ):
     @property
     def last(self):
         '''Last image in the downloaded releases'''
-        return RELEASE(self.releases[0], self.inst,
+        return RELEASE(self.releases[-1], self.inst,
                        self.verbose, load=True).last
 
 class RELEASE(PDS_OBJ):
