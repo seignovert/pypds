@@ -23,10 +23,12 @@ def release_int():
 def release_str():
     return 'covims_0064'
 
+@pytest.fixture
+def pds_url():
+    return 'https://pds-imaging.jpl.nasa.gov/data/cassini/cassini_orbiter/'
 
-def test_url(instrument):
-    assert PDS(instrument).url \
-        == 'https://pds-imaging.jpl.nasa.gov/data/cassini/cassini_orbiter/'
+def test_url(instrument, pds_url):
+    assert PDS(instrument).url == pds_url
 
 def test_last_release(instrument):
     assert type(PDS(instrument).last_release) is int
@@ -59,6 +61,7 @@ def test_nb_releases(instrument):
     nb_releases = PDS(instrument).nb_releases
     assert type(nb_releases) is int
     assert nb_releases > 0
+
 def test_nb_imgs(instrument):
     nb_imgs = PDS(instrument).nb_imgs
     assert type(nb_imgs) is int
@@ -66,10 +69,12 @@ def test_nb_imgs(instrument):
 
 def test_start(instrument):
     assert type(PDS(instrument).start) is datetime.datetime
+
 def test_end(instrument):
     assert type(PDS(instrument).end) is datetime.datetime
 
 def test_first(instrument):
     assert type(PDS(instrument).first) is IMG
+
 def test_last(instrument):
     assert type(PDS(instrument).last) is IMG
