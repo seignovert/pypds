@@ -24,7 +24,6 @@ class PDS_OBJ(object):
         self.spacecraft = SPACECRAFT
         self.inst = inst.lower()
         self.verbose = verbose
-        self.releases = None
         return
 
     def __repr__(self):
@@ -44,13 +43,39 @@ class PDS_OBJ(object):
 class PDS(PDS_OBJ):
     def __init__(self, inst=INSTRUMENT, verbose=VERBOSE):
         PDS_OBJ.__init__(self, inst, verbose)
-        self.releases = None
+        self.releases = self.list_md5
         return
 
     def __repr__(self):
         return 'PDS tree for the %s instrument onboard the %s of the %s mission' % (
             self.inst.upper(), self.spacecraft.title(), self.mission.title()
         )
+
+    def __len__(self):
+        return self.nb_releases
+
+    @property
+    def list_md5(self):
+        '''List the releases downloaded'''
+        releases = []
+        for md5 in os.listdir(MD5):
+            if md5.endswith('_md5.txt') and self.inst in md5:
+                releases.append(md5.replace('_md5.txt', ''))
+        return releases
+
+    @property
+    def nb_releases(self):
+        '''Number of releases downloaded'''
+        return len(self.releases)
+
+    @property
+    def nb_imgs(self):
+        '''Number of image in the folder'''
+        nb_imgs = 0
+        for release in self.releases:
+            nb_imgs += RELEASE(release,
+                               self.inst, self.verbose).nb_imgs
+        return nb_imgs
 
     @property
     def last_release(self):
@@ -67,10 +92,12 @@ class PDS(PDS_OBJ):
             print('> Last release available: #%i' % last_release)
         return last_release
 
-    def download(self, release=None):
+    def download_release(self, release=None):
         '''Download one or a list of releases'''
         if release is None:
             releases = range(1, self.last_release)
+            if self.verbose:
+                print('All the available releases will be downloaded')
         elif isinstance(release, (int,str)):
             releases = [release]
         else:
@@ -79,6 +106,30 @@ class PDS(PDS_OBJ):
         for _release in releases:
             RELEASE(_release, self.inst, self.verbose, load=False).download
         return
+
+    @property
+    def start(self):
+        '''Start time in the downloaded releases'''
+        return RELEASE(self.releases[0], self.inst,
+                       self.verbose, load=True).start
+
+    @property
+    def end(self):
+        '''End time in the downloaded releases'''
+        return RELEASE(self.releases[-1], self.inst,
+                       self.verbose, load=True).end
+
+    @property
+    def first(self):
+        '''First image in the downloaded releases'''
+        return RELEASE(self.releases[0], self.inst,
+                       self.verbose, load=True).first
+
+    @property
+    def last(self):
+        '''Last image in the downloaded releases'''
+        return RELEASE(self.releases[0], self.inst,
+                       self.verbose, load=True).last
 
 class RELEASE(PDS_OBJ):
     def __init__(self, ref, inst=INSTRUMENT, verbose=VERBOSE, load=True, overwrite=False):
@@ -104,6 +155,22 @@ class RELEASE(PDS_OBJ):
 
     def __repr__(self):
         return 'PDS release: %s' % str(self)
+
+    def __len__(self):
+        return self.nb_imgs
+
+    @property
+    def nb_folders(self):
+        '''Number of folder in the release'''
+        return len(self.folders)
+
+    @property
+    def nb_imgs(self):
+        '''Number of image in the folder'''
+        nb_imgs = 0
+        for i in range(self.nb_folders):
+            nb_imgs += self.folders[i].nb_imgs
+        return nb_imgs
 
     @property
     def url(self):
@@ -158,7 +225,9 @@ class RELEASE(PDS_OBJ):
     def load(self):
         '''Extract list of folders and images from md5 file'''
         if self.verbose:
-            print('Extracting data from md5 file release')
+            print('Extracting data from md5 file of release %s' %
+                str(self)
+            )
 
         prev = None
         for line in self.read:
@@ -223,6 +292,14 @@ class FOLDER(PDS_OBJ):
     def __repr__(self):
         return 'PDS release folder: %s' % str(self)
 
+    def __len__(self):
+        return self.nb_imgs
+
+    @property
+    def nb_imgs(self):
+        '''Number of images in the folder'''
+        return len(self.imgs)
+
     @property
     def url(self):
         return '/'.join([
@@ -263,15 +340,14 @@ class FOLDER(PDS_OBJ):
         '''Folder first image'''
         if len(self.imgs) == 0:
             return None
-        return str(self.imgs[0])
+        return self.imgs[0]
 
     @property
     def last(self):
         '''Folder last image'''
         if len(self.imgs) == 0:
             return None
-        return str(self.imgs[-1])
-
+        return self.imgs[-1]
 
 class IMG(PDS_OBJ):
     def __init__(self, img_id, folder, release, inst=INSTRUMENT):

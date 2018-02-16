@@ -13,25 +13,46 @@ Init
 ```python
 import pypds as pds
 
-# Check the last release for `VIMS`
+# Check the last release for `VIMS` available on the PDS
 pds.PDS('VIMS').last_release
 
+# List the releases downloaded
+pds.PDS('VIMS').releases
+
 # Download a single release
-pds.PDS('VIMS').download(1)
+pds.PDS('VIMS').download_release(1)
 # or
-pds.PDS('VIMS').download('covims_0001')
+pds.PDS('VIMS').download_release('covims_0001')
 
 # Download a serie releases
-pds.PDS('VIMS').download([1,2,3])
+pds.PDS('VIMS').download_release([1,2,3])
 
 # Download all the available releases
-pds.PDS('VIMS').download()
+pds.PDS('VIMS').download_release()
+
+# Count the number of images included in the downloaded releases
+pds.PDS('VIMS').nb_imgs
+# or
+len(pds.PDS('VIMS'))
+
+# Get start time in the downloaded releases
+pds.PDS('VIMS').start
+# Get release end time in the downloaded releases
+pds.PDS('VIMS').end
+
+# Get first image in the downloaded releases
+pds.PDS('VIMS').first
+# Get last image in the downloaded releases
+pds.PDS('VIMS').last
+
 ```
 
 Usage
 ---
 ```python
 import pypds as pds
+
+## RELEASES
 
 # Load a release
 pds.RELEASE('covims_0001')
@@ -48,35 +69,59 @@ pds.RELEASE('covims_0001', overwrite=True, load=False).download
 # Get release folders
 pds.RELEASE('covims_0001').folders
 
+# Count the number of images included in the release
+pds.RELEASE('covims_0001').nb_imgs
+# or
+len(pds.RELEASE('covims_0001'))
+
 # Get release start time
 pds.RELEASE('covims_0001').start
-
 # Get release end time
 pds.RELEASE('covims_0001').end
 
 # Get release first image
 pds.RELEASE('covims_0001').first
-
 # Get release last image
 pds.RELEASE('covims_0001').last
 
-# Get first image of the first folder
-pds.RELEASE('covims_0001').folders[0].imgs[0]
+
+## FOLDERS
+
+# Get a specific folder
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001')
+
+# Count the number of images included in the folder
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001').nb_imgs
+# or
+len(pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001'))
+
+# Get folder start time
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001').start
+# Get folder end time
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001').end
+
+# Get folder first image
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001').first
+# Get folder last image
+pds.FOLDER('2000262T123038_2000262T132642', 'covims_0001').last
+
+
+## IMAGES
+
+# Get a specific image
+img = pds.IMG('1347971911_3','2000262T123038_2000262T132642', 'covims_0001')
 
 # Get its `.LBL` location
-pds.RELEASE('covims_0001').folders[0].imgs[0].lbl
-
+img.lbl
 # Get its `.QUB` location
-pds.RELEASE('covims_0001').folders[0].imgs[0].qub
-
+img.qub
 # Get its `.JPG` location
-pds.RELEASE('covims_0001').folders[0].imgs[0].jpg
-
+img.jpg
 # Get its `.JPG thumbnail` location
-pds.RELEASE('covims_0001').folders[0].imgs[0].thumb
-
+img.thumb
 # Get its `.TIFF` location
-pds.RELEASE('covims_0001').folders[0].imgs[0].tiff
+img.tiff
+
 ```
 
 
