@@ -3,8 +3,7 @@ import pytest
 import os
 import datetime
 
-from pypds import PDS, IMG
-from pypds.folders import MD5
+from pypds import PDS, IMG, MD5
 
 
 @pytest.fixture

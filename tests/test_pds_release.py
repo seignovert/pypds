@@ -4,7 +4,6 @@ import os
 import datetime
 
 from pypds import RELEASE, IMG
-from pypds.folders import MD5
 
 
 @pytest.fixture
