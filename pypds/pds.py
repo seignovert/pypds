@@ -433,10 +433,6 @@ class IMG(PDS_OBJ):
         return self.url + pref + self.img_id + '.qub'
 
     @property
-    def img(self, pref='N'):
-        return self.url + pref + self.img_id + '.img'
-
-    @property
     def jpg(self, pref='v'):
         return self.extras('browse') + pref + self.img_id + '.qub.jpeg'
 
