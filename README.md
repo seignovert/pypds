@@ -13,6 +13,14 @@ Init
 ```python
 import pypds as pds
 
+# Download a single release
+pds.PDS('VIMS').download_release(1)
+# or
+pds.PDS('VIMS').download_release('covims_0001')
+
+# Download a serie releases
+pds.PDS('VIMS').download_release([1,2,3])
+
 # Check the last release for `VIMS` available on the PDS
 pds.PDS('VIMS').last_release
 
@@ -21,14 +29,6 @@ pds.PDS('VIMS').releases
 
 # Download all the new releases
 pds.PDS('VIMS').update
-
-# Download a single release
-pds.PDS('VIMS').download_release(1)
-# or
-pds.PDS('VIMS').download_release('covims_0001')
-
-# Download a serie releases
-pds.PDS('VIMS').download_release([1,2,3])
 
 # Count the number of images included in the downloaded releases
 pds.PDS('VIMS').nb_imgs
@@ -160,7 +160,7 @@ DB().img('1766654697_1').lbl
 ## RELEASE
 
 # Get all the releases for an instrument
-pypds.DB().releases('vims')
+DB().releases('vims')
 ```
 
 
