@@ -20,6 +20,5 @@ setup(name='pypds',
           'requests',
           'logging',   
           'datetime',
-          'sqlite3',
       ],
       zip_safe=False)
