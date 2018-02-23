@@ -56,6 +56,7 @@ def date_split(name, fmt='%Y%jT%H%M%S'):
 
 def list_md5(inst):
     '''List the releases downloaded for specific instrument'''
+    mkdir(MD5)
     releases = []
     for md5 in os.listdir(MD5):
         if md5.endswith('_md5.txt') and inst in md5:
