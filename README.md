@@ -14,36 +14,36 @@ Init
 import pypds as pds
 
 # Download a single release
-pds.PDS('VIMS').download_release(1)
+pds.PDS('vims').download_release(1)
 # or
-pds.PDS('VIMS').download_release('covims_0001')
+pds.PDS('vims').download_release('covims_0001')
 
 # Download a serie releases
-pds.PDS('VIMS').download_release([1,2,3])
+pds.PDS('vims').download_release([1,2,3])
 
 # Check the last release for `VIMS` available on the PDS
-pds.PDS('VIMS').last_release
+pds.PDS('vims').last_release
 
 # List the releases downloaded
-pds.PDS('VIMS').releases
+pds.PDS('vims').releases
 
 # Download all the new releases
-pds.PDS('VIMS').update
+pds.PDS('vims').update
 
 # Count the number of images included in the downloaded releases
-pds.PDS('VIMS').nb_imgs
+pds.PDS('vims').nb_imgs
 # or
-len(pds.PDS('VIMS'))
+len(pds.PDS('vims'))
 
 # Get start time in the downloaded releases
-pds.PDS('VIMS').start
+pds.PDS('vims').start
 # Get release end time in the downloaded releases
-pds.PDS('VIMS').end
+pds.PDS('vims').end
 
 # Get first image in the downloaded releases
-pds.PDS('VIMS').first
+pds.PDS('vims').first
 # Get last image in the downloaded releases
-pds.PDS('VIMS').last
+pds.PDS('vims').last
 
 ```
 
