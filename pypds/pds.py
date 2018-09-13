@@ -12,7 +12,7 @@ from .pds_release import RELEASE
 class PDS(PDS_OBJ):
     def __init__(self, inst=INSTRUMENT, verbose=VERBOSE):
         PDS_OBJ.__init__(self, inst, verbose)
-        self.releases = sorted(list_md5(inst))
+        self.releases = sorted(list_md5(self.inst))
         return
 
     def __repr__(self):
