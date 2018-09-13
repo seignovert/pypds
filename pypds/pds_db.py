@@ -166,10 +166,12 @@ class DB(object):
         sql = 'SELECT release FROM all_%s ' % inst.lower()
         sql += 'WHERE first >= %i ORDER BY release LIMIT 1' % img_key
         release = self.fetchOne(sql)
-        if not release is None:
+        if release is not None:
             img = self.img_release(img_id, release[0])
-        if img is None:
-            img = self.img_all(img_id, inst)
+            if img is None:
+                img = self.img_all(img_id, inst)
+        else:
+            raise ValueError('This image {} is too recent. Please update your database'.format(img_id))
         return img
 
     def img_release(self, img_id, release):
