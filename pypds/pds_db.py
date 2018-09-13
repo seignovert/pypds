@@ -2,6 +2,7 @@
 
 import os
 import sqlite3
+from builtins import input
 
 from ._communs import DB_NAME, MD5, INSTRUMENT, date_split, list_md5
 from .pds_release import RELEASE, IMG
@@ -21,7 +22,7 @@ class DB(object):
     @property
     def delete(self):
         '''Delete the database'''
-        user = raw_input('Delete PDS database? [y/N]: ')
+        user = input('Delete PDS database? [y/N]: ')
         if user == 'y' or user == 'Y':
             self.connexion.close()
             os.remove(DB_NAME)
