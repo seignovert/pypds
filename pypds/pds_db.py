@@ -125,7 +125,7 @@ class DB(object):
         inst = inst.lower()
         self.create_table('all_'+inst, self.releases_fields)
         
-        for md5 in list_md5(inst):
+        for md5 in sorted(list_md5(inst)):
             release = RELEASE(md5)
             self.create_table(md5, self.md5_fields)
             
